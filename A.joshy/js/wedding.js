@@ -291,9 +291,9 @@ if (musicPillDet) musicPillDet.addEventListener('click', toggleMusic);
 /* ════════════════════════════════════════════
    DOWNLOAD CARD BUTTON
 ════════════════════════════════════════════ */
-async function downloadWeddingCard(btn) {
-  const CARD_URL = 'assets/IMG-20260811-WA0089 (1).jpg';
-  const FILENAME = 'Anjana-Akshay-WeddingCard.jpg';
+async function downloadWeddingCard(btn, cardUrl, filename) {
+  const CARD_URL = cardUrl || 'assets/IMG-20260811-WA0089 (1).jpg';
+  const FILENAME = filename || 'Anjana-Akshay-WeddingCard.jpg';
 
   const origText = btn.textContent;
   btn.textContent = 'Downloading…';
@@ -331,6 +331,11 @@ async function downloadWeddingCard(btn) {
 
 document.querySelectorAll('.download-btn:not(.disabled)').forEach(btn => {
   btn.addEventListener('click', () => downloadWeddingCard(btn));
+});
+
+/* ── Download second card ────────────────── */
+document.querySelectorAll('.download-btn-2:not(.disabled)').forEach(btn => {
+  btn.addEventListener('click', () => downloadWeddingCard(btn, 'assets/IMG-20260811-WA0090.jpg', 'Anjana-Akshay-WeddingCard-2.jpg'));
 });
 
 

@@ -2,12 +2,12 @@
 
 /* ══════════════════════════════════════════
    WEDDING WEBSITE — JAVASCRIPT
-   Mohammed Abdul Razak & Henna Shireen
-   Nikah: Wednesday, 20 May 2026, 5:30 PM IST
+   Anjana & Akshay
+   Muhoortham: Sunday, 23 August 2026, 10:30 AM IST
 ══════════════════════════════════════════ */
 
 // ── Wedding date target ────────────────────
-const WEDDING_DATE = new Date('2026-05-20T17:30:00+05:30');
+const WEDDING_DATE = new Date('2026-08-23T10:30:00+05:30');
 
 // ── DOM refs ───────────────────────────────
 const splash        = document.getElementById('splash');
@@ -293,7 +293,7 @@ if (musicPillDet) musicPillDet.addEventListener('click', toggleMusic);
 ════════════════════════════════════════════ */
 async function downloadWeddingCard(btn) {
   const CARD_URL = 'assets/wedding-card.png';
-  const FILENAME = 'Mohammed-Henna-WeddingCard.png';
+  const FILENAME = 'Anjana-Akshay-WeddingCard.png';
 
   const origText = btn.textContent;
   btn.textContent = 'Downloading…';
@@ -309,7 +309,7 @@ async function downloadWeddingCard(btn) {
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       await navigator.share({
         files: [file],
-        title: 'Mohammed & Henna — Wedding Card',
+        title: 'Anjana & Akshay — Wedding Card',
         text:  'You\'re invited! ✨'
       });
     } else {

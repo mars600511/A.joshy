@@ -349,9 +349,114 @@ function vibrate(pattern) {
 swipeThumb.addEventListener('touchstart', () => vibrate(10), { passive: true });
 
 /* ════════════════════════════════════════════
-   LUCIDE ICONS — initialise all data-lucide
+   RSVP TRACKING
 ════════════════════════════════════════════ */
-if (typeof lucide !== 'undefined') lucide.createIcons();
+const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/d/AKfycby6xBILS6Ejri5iqkPtWTtcHJKhR1JkMpDfZg2lV02pD8vS28EdeLxj5YwzXxGxQ3kW/usercontent';
+const rsvpModal = document.getElementById('rsvpModal');
+const rsvpForm = document.getElementById('rsvpForm');
+const rsvpClose = document.getElementById('rsvpClose');
+const countNumber = document.getElementById('countNumber');
+
+// Load attendee count from localStorage
+function loadAttendeeCount() {
+  const count = localStorage.getItem('rsvpCount') || '0';
+  countNumber.textContent = count;
+  return parseInt(count);
+}
+
+// Increment attendee count
+function incrementAttendeeCount() {
+  let count = parseInt(localStorage.getItem('rsvpCount') || '0');
+  count++;
+  localStorage.setItem('rsvpCount', count);
+  countNumber.textContent = count;
+}
+
+// Show RSVP modal
+function showRsvpModal() {
+  rsvpModal.classList.add('open');
+  rsvpModal.removeAttribute('aria-hidden');
+}
+
+// Hide RSVP modal
+function hideRsvpModal() {
+  rsvpModal.classList.remove('open');
+  rsvpModal.setAttribute('aria-hidden', 'true');
+}
+
+// Handle RSVP form submission
+rsvpForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const name = document.getElementById('guestName').value.trim();
+  const phone = document.getElementById('guestPhone').value.trim();
+  
+  if (!name || !phone) return;
+  
+  const submitBtn = rsvpForm.querySelector('.rsvp-submit');
+  const origText = submitBtn.textContent;
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Saving...';
+  
+  try {
+    // Send to Google Sheets
+    const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: name,
+        phone: phone,
+        timestamp: new Date().toLocaleString()
+      })
+    });
+    
+    // Increment counter
+    incrementAttendeeCount();
+    
+    // Reset form
+    rsvpForm.reset();
+    
+    // Show success message
+    submitBtn.textContent = '✓ RSVP Confirmed!';
+    setTimeout(() => {
+      hideRsvpModal();
+      submitBtn.textContent = origText;
+      submitBtn.disabled = false;
+    }, 1500);
+  } catch (error) {
+    submitBtn.textContent = origText;
+    submitBtn.disabled = false;
+  }
+});
+
+// Close modal handlers
+rsvpClose.addEventListener('click', hideRsvpModal);
+rsvpModal.addEventListener('click', (e) => {
+  if (e.target === rsvpModal || e.target === document.querySelector('.rsvp-overlay')) {
+    hideRsvpModal();
+  }
+});
+
+// Load initial count
+loadAttendeeCount();
+
+/* ════════════════════════════════════════════
+   MODIFY SWIPE TO SHOW RSVP MODAL
+════════════════════════════════════════════ */
+// Store original completeSwipe function
+const originalCompleteSwipe = window.completeSwipeFunc;
+
+// We'll modify the completeSwipe within the initSwipe IIFE by intercepting the details reveal
+const originalRevealDetails = revealDetails;
+function revealDetailsWithRsvp() {
+  originalRevealDetails();
+  // Show RSVP modal after a brief delay
+  setTimeout(showRsvpModal, 800);
+}
+revealDetails = revealDetailsWithRsvp;
+
+
 
 /* ════════════════════════════════════════════
    TRANSPORT ACCORDION

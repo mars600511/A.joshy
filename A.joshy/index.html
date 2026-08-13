@@ -262,6 +262,30 @@
     <source src="audio/Sita-Kalyanam-MassTamilan.com.mp3" type="audio/mpeg" />
   </audio>
 
+  <!-- RSVP Modal -->
+  <div id="rsvpModal" class="rsvp-modal" aria-hidden="true">
+    <div class="rsvp-overlay"></div>
+    <div class="rsvp-card">
+      <button class="rsvp-close" id="rsvpClose" aria-label="Close RSVP form">×</button>
+      <h2 class="rsvp-title">Confirm Your Attendance</h2>
+      <form id="rsvpForm" class="rsvp-form">
+        <div class="form-group">
+          <label for="guestName">Your Name *</label>
+          <input type="text" id="guestName" name="name" placeholder="Enter your name" required />
+        </div>
+        <div class="form-group">
+          <label for="guestPhone">Phone Number *</label>
+          <input type="tel" id="guestPhone" name="phone" placeholder="Your phone number" required />
+        </div>
+        <button type="submit" class="rsvp-submit">Confirm RSVP</button>
+      </form>
+      <p class="rsvp-note">We're excited to celebrate with you! 🎉</p>
+      <div class="attendee-counter">
+        <p id="attendeeCount">Guests attending: <span id="countNumber">0</span></p>
+      </div>
+    </div>
+  </div>
+
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <script src="js/wedding.js"></script>
 </body>

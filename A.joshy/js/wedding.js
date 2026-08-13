@@ -292,8 +292,8 @@ if (musicPillDet) musicPillDet.addEventListener('click', toggleMusic);
    DOWNLOAD CARD BUTTON
 ════════════════════════════════════════════ */
 async function downloadWeddingCard(btn) {
-  const CARD_URL = 'assets/wedding-card.png';
-  const FILENAME = 'Anjana-Akshay-WeddingCard.png';
+  const CARD_URL = 'assets/IMG-20260811-WA0089 (1).jpg';
+  const FILENAME = 'Anjana-Akshay-WeddingCard.jpg';
 
   const origText = btn.textContent;
   btn.textContent = 'Downloading…';

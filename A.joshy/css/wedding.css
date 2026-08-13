@@ -218,7 +218,7 @@ img { display: block; }
 /* ── Invite text ─────────────────────────── */
 /*  Figma: y=268, Poppins Regular 12px         */
 .splash-invite {
-  top: calc(max(env(safe-area-inset-top, 0px), 54px) + 229px); /* Figma y=268 + 15 */
+  top: calc(max(env(safe-area-inset-top, 0px), 54px) + 520px); /* Moved down below bride name */
   left: 50%;
   transform: translateX(-50%);
   width: min(298px, calc(100% - 32px));
@@ -233,7 +233,7 @@ img { display: block; }
 /* ── Groom name ──────────────────────────── */
 /*  Figma: y=314, Astonia Regular ~40px        */
 .splash-groom {
-  top: calc(max(env(safe-area-inset-top, 0px), 54px) + 275px); /* Figma y=314 + 15 */
+  top: calc(max(env(safe-area-inset-top, 0px), 54px) + 60px); /* Moved to top */
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -252,7 +252,7 @@ img { display: block; }
 /* ── "weds" badge ────────────────────────── */
 /*  Figma: y≈381, Comforter on pink bar        */
 .splash-weds-wrap {
-  top: calc(max(env(safe-area-inset-top, 0px), 54px) + 342px); /* Figma y=381 + 15 */
+  top: calc(max(env(safe-area-inset-top, 0px), 54px) + 130px); /* Below groom name */
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -284,7 +284,7 @@ img { display: block; }
 /* ── Bride name ──────────────────────────── */
 /*  Figma: y=437, Astonia Regular ~40px        */
 .splash-bride {
-  top: calc(max(env(safe-area-inset-top, 0px), 54px) + 398px); /* Figma y=437 + 15 */
+  top: calc(max(env(safe-area-inset-top, 0px), 54px) + 190px); /* Below weds badge */
   left: 50%;
   transform: translateX(-50%);
   font-family: var(--font-astonia);
@@ -300,7 +300,7 @@ img { display: block; }
 /* ── Countdown ───────────────────────────── */
 /*  Figma: y=526                               */
 .countdown {
-  top: calc(max(env(safe-area-inset-top, 0px), 54px) + 487px); /* Figma y=526 + 15 */
+  top: calc(max(env(safe-area-inset-top, 0px), 54px) + 310px); /* Below bride name and invite */
   left: 0; right: 0;
   display: flex;
   align-items: flex-end;
@@ -366,7 +366,7 @@ img { display: block; }
 /* ── Event Date / Venue ──────────────────── */
 /*  Figma: y=646 (date), y=666 (venue)         */
 .event-meta {
-  top: calc(max(env(safe-area-inset-top, 0px), 54px) + 607px); /* Figma y=646 + 15 */
+  top: calc(max(env(safe-area-inset-top, 0px), 54px) + 470px); /* Below countdown */
   left: 0; right: 0;
   text-align: center;
   padding: 0 24px;

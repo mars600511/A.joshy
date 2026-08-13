@@ -1,239 +1,483 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#f5c6e8" />
-  <title>Anjana &amp; Akshay | Wedding Invitation</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Comforter&family=Poppins:wght@300;400;500;600&family=Sora:wght@600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/wedding.css" />
-</head>
-<body>
+'use strict';
 
-  <!-- ═══════════════════════════════════════
-       PAGE 1 — SPLASH / HERO
-  ═══════════════════════════════════════ -->
-  <section id="splash" class="page">
+/* ══════════════════════════════════════════
+   WEDDING WEBSITE — JAVASCRIPT
+   Anjana & Akshay
+   Muhoortham: Sunday, 23 August 2026, 10:30 AM IST
+══════════════════════════════════════════ */
 
-    <div class="splash-bg">
-      <img src="assets/splash-bg.jpg" alt="" aria-hidden="true" class="splash-bg-img" />
-      <div class="splash-overlay"></div>
-    </div>
+// ── Wedding date target ────────────────────
+const WEDDING_DATE = new Date('2026-08-23T10:30:00+05:30');
 
-    <!-- Music pill (top-right) -->
-    <button class="music-pill" id="musicPill" aria-label="Play Music">
-      <span class="music-pill-label">Wedding Song</span>
-      <span class="music-pill-btn">
-        <i data-lucide="music-2" class="mp-icon icon-play" width="12" height="12"></i>
-        <i data-lucide="pause" class="mp-icon icon-pause" width="12" height="12"></i>
-      </span>
-    </button>
+// ── DOM refs ───────────────────────────────
+const splash        = document.getElementById('splash');
+const details       = document.getElementById('details');
+const swipeTrack    = document.getElementById('swipeTrack');
+const swipeThumb    = document.getElementById('swipeThumb');
+const swipeLabel    = document.getElementById('swipeLabel');
+const swipeFill     = document.getElementById('swipeFill');
+const bgMusic       = document.getElementById('bgMusic');
+const musicPill     = document.getElementById('musicPill');
+const musicPillDet  = document.getElementById('musicPillDetails');
 
-    <!-- Invite text -->
-    <p class="splash-invite splash-enter" style="--delay:0.4s">
-      Together with our families, invite you to celebrate the beginning of our forever
-    </p>
+// ── State ──────────────────────────────────
+let musicStarted = false;  // has audio.play() ever succeeded?
+let musicMuted   = false;  // is it currently muted?
 
-    <!-- Groom name -->
-    <div class="splash-groom splash-enter" style="--delay:0.5s">
-      <span>Akshay</span>
-    </div>
+/* ════════════════════════════════════════════
+   AUDIO UNLOCK — iOS Safari requires a play()
+   call during a user gesture before any later
+   play() will succeed. We trigger a silent
+   play/pause on the very first touch so that
+   by the time the swipe completes, the audio
+   context is already unlocked.
+════════════════════════════════════════════ */
+(function unlockAudioOnFirstTouch() {
+  if (!bgMusic) return;
+  function unlock() {
+    bgMusic.muted = true;
+    bgMusic.play().then(() => {
+      bgMusic.pause();
+      bgMusic.currentTime = 0;
+      bgMusic.muted = false;
+    }).catch(() => {});
+    document.removeEventListener('touchstart', unlock, true);
+    document.removeEventListener('mousedown',  unlock, true);
+  }
+  document.addEventListener('touchstart', unlock, { capture: true, once: true, passive: true });
+  document.addEventListener('mousedown',  unlock, { capture: true, once: true });
+})();
 
-    <!-- "and" / "weds" badge -->
-    <div class="splash-weds-wrap splash-enter" style="--delay:0.6s">
-      <div class="splash-weds-bar"></div>
-      <span class="splash-weds">and</span>
-    </div>
+/* ════════════════════════════════════════════
+   COUNTDOWN TIMER
+════════════════════════════════════════════ */
+const cdDays  = document.getElementById('cd-days');
+const cdHours = document.getElementById('cd-hours');
+const cdMins  = document.getElementById('cd-mins');
+const cdSecs  = document.getElementById('cd-secs');
 
-    <!-- Bride name -->
-    <p class="splash-bride splash-enter" style="--delay:0.65s">Anjana</p>
+function pad(n) { return String(Math.max(0, n)).padStart(2, '0'); }
 
-    <!-- Countdown timer -->
-    <div class="countdown splash-enter" id="countdown" style="--delay:0.8s">
-      <div class="count-unit">
-        <span class="count-label">Days</span>
-        <div class="count-box"><span id="cd-days">00</span></div>
-      </div>
-      <span class="count-sep">
-        <svg width="7" height="7" viewBox="0 0 8 8"><circle cx="4" cy="4" r="3" fill="white" opacity="0.7"/></svg>
-      </span>
-      <div class="count-unit">
-        <span class="count-label">Hours</span>
-        <div class="count-box"><span id="cd-hours">00</span></div>
-      </div>
-      <span class="count-sep">
-        <svg width="7" height="7" viewBox="0 0 8 8"><circle cx="4" cy="4" r="3" fill="white" opacity="0.7"/></svg>
-      </span>
-      <div class="count-unit">
-        <span class="count-label">Minutes</span>
-        <div class="count-box"><span id="cd-mins">00</span></div>
-      </div>
-      <span class="count-sep">
-        <svg width="7" height="7" viewBox="0 0 8 8"><circle cx="4" cy="4" r="3" fill="white" opacity="0.7"/></svg>
-      </span>
-      <div class="count-unit">
-        <span class="count-label">Seconds</span>
-        <div class="count-box"><span id="cd-secs">00</span></div>
-      </div>
-    </div>
+function animateDigit(el, newVal) {
+  if (el.textContent === newVal) return;
+  el.classList.remove('flip');
+  // Force reflow
+  void el.offsetWidth;
+  el.textContent = newVal;
+  el.classList.add('flip');
+}
 
-    <!-- Date + venue -->
-    <div class="event-meta splash-enter" style="--delay:1s">
-      <p class="event-date">Sunday, 23 August 2026</p>
-      <p class="event-venue">Golden Palace Auditorium, Choondal</p>
-    </div>
+function updateCountdown() {
+  const now  = Date.now();
+  const diff = WEDDING_DATE.getTime() - now;
 
-    <!-- Swipe CTA -->
-    <div class="swipe-wrap splash-enter" style="--delay:1.2s">
-      <div class="swipe-track" id="swipeTrack" role="button" aria-label="Swipe right to confirm attendance">
-        <div class="swipe-thumb" id="swipeThumb">
-          <i data-lucide="chevron-right" width="28" height="28" style="color:#780269"></i>
-        </div>
-        <span class="swipe-label" id="swipeLabel">Yeah, I am attending</span>
-        <div class="swipe-fill" id="swipeFill"></div>
-      </div>
-    </div>
+  if (diff <= 0) {
+    animateDigit(cdDays,  '00');
+    animateDigit(cdHours, '00');
+    animateDigit(cdMins,  '00');
+    animateDigit(cdSecs,  '00');
+    return;
+  }
 
-    <!-- Floating petals -->
-    <div class="petals" aria-hidden="true">
-      <span class="petal" style="--x:10%;--delay:0s;--dur:6s"></span>
-      <span class="petal" style="--x:25%;--delay:1.5s;--dur:7s"></span>
-      <span class="petal" style="--x:50%;--delay:0.8s;--dur:8s"></span>
-      <span class="petal" style="--x:70%;--delay:2s;--dur:5.5s"></span>
-      <span class="petal" style="--x:85%;--delay:0.3s;--dur:7.5s"></span>
-    </div>
+  const totalSecs = Math.floor(diff / 1000);
+  const days  = Math.floor(totalSecs / 86400);
+  const hours = Math.floor((totalSecs % 86400) / 3600);
+  const mins  = Math.floor((totalSecs % 3600) / 60);
+  const secs  = totalSecs % 60;
 
-  </section>
+  animateDigit(cdDays,  pad(days));
+  animateDigit(cdHours, pad(hours));
+  animateDigit(cdMins,  pad(mins));
+  animateDigit(cdSecs,  pad(secs));
+}
 
-  <!-- ═══════════════════════════════════════
-       PAGE 2 — DETAILS
-  ═══════════════════════════════════════ -->
-  <section id="details" class="page page-details" aria-hidden="true">
+updateCountdown();
+setInterval(updateCountdown, 1000);
 
-    <!-- Hero top -->
-    <div class="details-hero">
-      <img src="assets/details-hero-bg.jpg" alt="" aria-hidden="true" class="details-hero-bg" />
-      <div class="details-hero-overlay"></div>
+/* ════════════════════════════════════════════
+   SWIPE-TO-ATTEND
+════════════════════════════════════════════ */
+(function initSwipe() {
+  let isDragging = false;
+  let startX     = 0;
+  let currentX   = 0;
+  let trackW, thumbW, maxTravel;
 
-      <!-- Music pill -->
-      <button class="music-pill music-pill-details" id="musicPillDetails" aria-label="Toggle music">
-        <span class="music-pill-label">Wedding Song</span>
-        <span class="music-pill-btn">
-          <i data-lucide="music-2" class="mp-icon icon-play" width="12" height="12"></i>
-          <i data-lucide="pause" class="mp-icon icon-pause" width="12" height="12"></i>
-        </span>
-      </button>
+  function getGeometry() {
+    trackW    = swipeTrack.offsetWidth;
+    thumbW    = swipeThumb.offsetWidth;
+    maxTravel = trackW - thumbW - 16; // 8px padding each side
+  }
 
-      <!-- Groom name -->
-      <div class="dh-groom">
-        <span>Akshay</span>
-      </div>
+  function setThumbX(x) {
+    x = Math.max(0, Math.min(x, maxTravel));
+    currentX = x;
+    const progress = x / maxTravel;
 
-      <!-- "and" badge -->
-      <div class="dh-weds-wrap">
-        <div class="dh-weds-bar"></div>
-        <span class="dh-weds">and</span>
-      </div>
+    swipeThumb.style.transform = `translateY(-50%) translateX(${x}px)`;
+    swipeLabel.style.opacity = String(Math.max(0, 1 - progress * 2));
+    swipeFill.style.width = `${progress * 100}%`;
+    swipeTrack.style.border = `1px solid rgba(255,255,255,${0.25 + progress * 0.5})`;
+  }
 
-      <!-- Bride name -->
-      <p class="dh-bride">Anjana</p>
+  function onDragStart(clientX) {
+    getGeometry();
+    isDragging = true;
+    startX     = clientX - currentX;
+    swipeThumb.style.transition = 'none';
+    swipeFill.style.transition  = 'none';
+    swipeTrack.style.cursor     = 'grabbing';
+  }
 
-      <!-- Sparkle divider -->
-      <div class="dh-divider-row">
-        <div class="dh-divider-line"></div>
-        <span class="dh-sparkle-star">✦</span>
-        <div class="dh-divider-line"></div>
-      </div>
-    </div>
+  function onDragMove(clientX) {
+    if (!isDragging) return;
+    setThumbX(clientX - startX);
+  }
 
-    <!-- Scrollable content card -->
-    <div class="details-sheet">
+  function onDragEnd() {
+    if (!isDragging) return;
+    isDragging = false;
+    swipeTrack.style.cursor = '';
 
-      <!-- Save the date card -->
-      <div class="save-date-card">
-        <div class="sdt-ornament">
-          <div class="sdt-line"></div>
-          <span class="sdt-sparkle">✦</span>
-          <div class="sdt-line"></div>
-        </div>
-        <p class="sdt-eyebrow">Save the Date</p>
-        <p class="sdt-date">Sunday, 23 August 2026</p>
-        <p class="sdt-venue-hint">Golden Palace Auditorium, Choondal</p>
-        <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Anjana+%26+Akshay+Wedding&dates=20260823T050000Z/20260823T060000Z&details=Wedding+Muhoortham+10:30+AM+to+11:15+AM&location=Golden+Palace+Auditorium,+Choondal" target="_blank" class="sdt-cal-btn" rel="noopener">
-          <i data-lucide="calendar" width="15" height="15"></i>
-          Add to Calendar
-        </a>
-      </div>
+    if (currentX / maxTravel >= 0.78) {
+      completeSwipe();
+    } else {
+      snapBack();
+    }
+  }
 
-      <!-- ── Venue ── -->
-      <div class="card-section stagger-child">
-        <h2 class="section-heading">Venue</h2>
-        <div class="info-card venue-elegant">
-          <div class="venue-top">
-            <div class="venue-pin-circle">
-              <i data-lucide="map-pin" width="18" height="18"></i>
-            </div>
-            <div class="venue-text">
-              <h3 class="venue-name">Golden Palace Auditorium</h3>
-              <p class="venue-addr">Choondal · Kerala, India</p>
-            </div>
-          </div>
-          <div class="venue-sep"></div>
-          <div class="venue-time">
-            <i data-lucide="clock" width="14" height="14" style="color:#516271"></i>
-            <span>Muhoortham: 10:30 AM – 11:15 AM · Sunday, 23 August 2026</span>
-          </div>
-          <a href="https://maps.google.com/?q=Golden+Palace+Auditorium+Choondal" target="_blank" rel="noopener" class="directions-btn-full">
-            <i data-lucide="navigation" width="15" height="15"></i>
-            Get Directions
-          </a>
-        </div>
-      </div>
+  function snapBack() {
+    swipeThumb.style.transition = 'transform 0.45s cubic-bezier(0.32,0.72,0,1)';
+    swipeFill.style.transition  = 'width 0.45s cubic-bezier(0.32,0.72,0,1)';
+    swipeLabel.style.transition = 'opacity 0.3s';
+    setThumbX(0);
+    currentX = 0;
+    swipeLabel.style.opacity = '1';
+  }
 
-      <!-- ── Photo Gallery ── -->
-      <div class="card-section">
-        <h2 class="section-heading">Photo Gallery</h2>
-        <div class="info-card selfie-card">
+  function completeSwipe() {
+    getGeometry();
+    swipeThumb.style.transition = 'transform 0.3s cubic-bezier(0.32,0.72,0,1)';
+    swipeFill.style.transition  = 'width 0.3s ease';
+    setThumbX(maxTravel);
 
-          <div class="selfie-header">
-            <div class="selfie-scan-wrap">
-              <span class="kwik-ring kwik-ring-1"></span>
-              <span class="kwik-ring kwik-ring-2"></span>
-              <i data-lucide="scan-face" width="28" height="28" class="kwik-face-icon"></i>
-            </div>
-            <span class="selfie-coming-tag">Coming Soon</span>
-          </div>
+    swipeTrack.classList.add('done');
+    swipeLabel.style.opacity    = '0';
+    swipeLabel.style.paddingLeft = '0';
 
-          <div class="selfie-body">
-            <h3 class="selfie-headline">Your face,<br>your memories</h3>
-            <p class="selfie-sub">Take a quick selfie after the wedding and our smart gallery will find every photo you appear in — delivered straight to your phone, no searching needed.</p>
+    setTimeout(() => {
+      swipeLabel.textContent   = 'See you there! ✓';
+      swipeLabel.style.opacity = '1';
+    }, 250);
 
-            <button class="selfie-cta" disabled>
-              <i data-lucide="camera" width="17" height="17"></i>
-              Get My Photos
-            </button>
+    // ── Start music SYNCHRONOUSLY during user gesture ──────────
+    // bgMusic.play() must be called within the touchend/mouseup
+    // event handler — any setTimeout breaks the autoplay policy.
+    if (bgMusic && !musicStarted) {
+      bgMusic.volume = 0;
+      bgMusic.play().then(() => {
+        musicStarted = true;
+        musicMuted   = false;
+        updateMusicUI();
+        fadeVolume(0, 0.55, 2000);
+      }).catch(() => {
+        // Autoplay blocked — user can tap the music pill to start
+      });
+    }
 
-            <p class="selfie-note">Link will be available a few days after the wedding</p>
-          </div>
+    // Page reveal can safely be deferred (it's UI only)
+    setTimeout(revealDetails, 700);
+  }
 
-        </div>
-      </div>
+  // ── Touch events ───────────────────────────
+  swipeThumb.addEventListener('touchstart', e => {
+    e.preventDefault();
+    onDragStart(e.touches[0].clientX);
+  }, { passive: false });
 
-      <footer class="wedding-footer">
-        <p>Two hearts, one promise, a lifetime of dreams.</p>
-        <p class="footer-names">Anjana &amp; Akshay</p>
-      </footer>
+  document.addEventListener('touchmove', e => {
+    if (isDragging) {
+      e.preventDefault();
+      onDragMove(e.touches[0].clientX);
+    }
+  }, { passive: false });
 
-    </div><!-- /details-sheet -->
-  </section>
+  document.addEventListener('touchend', () => onDragEnd());
 
-  <audio id="bgMusic" loop preload="auto">
-    <source src="audio/wedding-song.mp3" type="audio/mpeg" />
-  </audio>
+  // ── Mouse events (desktop) ─────────────────
+  swipeThumb.addEventListener('mousedown', e => {
+    e.preventDefault();
+    onDragStart(e.clientX);
+  });
+  document.addEventListener('mousemove', e => {
+    if (isDragging) onDragMove(e.clientX);
+  });
+  document.addEventListener('mouseup', () => onDragEnd());
 
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-  <script src="js/wedding.js"></script>
-</body>
-</html>
+  // Resize
+  window.addEventListener('resize', () => {
+    if (!swipeTrack.classList.contains('done')) { currentX = 0; }
+  });
+})();
+
+/* ════════════════════════════════════════════
+   PAGE TRANSITION — REVEAL DETAILS
+════════════════════════════════════════════ */
+function revealDetails() {
+  details.classList.add('revealed');
+  details.removeAttribute('aria-hidden');
+
+  splash.classList.add('exit');
+  setTimeout(() => { splash.style.visibility = 'hidden'; }, 900);
+
+}
+
+/* ════════════════════════════════════════════
+   BACKGROUND MUSIC
+════════════════════════════════════════════ */
+function fadeVolume(from, to, durationMs) {
+  const steps    = 40;
+  const interval = durationMs / steps;
+  const delta    = (to - from) / steps;
+  let   current  = from;
+  const timer    = setInterval(() => {
+    current = Math.max(0, Math.min(1, current + delta));
+    bgMusic.volume = current;
+    if ((delta > 0 && current >= to) || (delta < 0 && current <= to)) {
+      clearInterval(timer);
+    }
+  }, interval);
+}
+
+function toggleMusic() {
+  if (!bgMusic) return;
+
+  if (!musicStarted) {
+    // Audio hasn't started yet (swipe not done / autoplay blocked)
+    // This click IS a user gesture so play() will work here
+    bgMusic.volume = 0;
+    bgMusic.play().then(() => {
+      musicStarted = true;
+      musicMuted   = false;
+      updateMusicUI();
+      fadeVolume(0, 0.55, 1000);
+    }).catch(() => {});
+    return;
+  }
+
+  // Toggle mute / unmute (don't pause — keep buffer position)
+  musicMuted    = !musicMuted;
+  bgMusic.muted = musicMuted;
+  updateMusicUI();
+}
+
+function updateMusicUI() {
+  const isAudible = musicStarted && !musicMuted;
+  const pills = [musicPill, musicPillDet].filter(Boolean);
+  pills.forEach(p => {
+    if (isAudible) {
+      p.classList.add('playing');
+      p.setAttribute('aria-label', 'Mute music');
+    } else {
+      p.classList.remove('playing');
+      p.setAttribute('aria-label', 'Play Nikkah Nasheed');
+    }
+  });
+}
+
+if (musicPill)    musicPill.addEventListener('click', toggleMusic);
+if (musicPillDet) musicPillDet.addEventListener('click', toggleMusic);
+
+/* ════════════════════════════════════════════
+   DOWNLOAD CARD BUTTON
+════════════════════════════════════════════ */
+async function downloadWeddingCard(btn, cardUrl, filename) {
+  const CARD_URL = cardUrl || 'assets/IMG-20260811-WA0089 (1).jpg';
+  const FILENAME = filename || 'Anjana-Akshay-WeddingCard.jpg';
+
+  const origText = btn.textContent;
+  btn.textContent = 'Downloading…';
+  btn.disabled    = true;
+
+  try {
+    const res  = await fetch(CARD_URL);
+    if (!res.ok) throw new Error('Card image not found');
+    const blob = await res.blob();
+    const file = new File([blob], FILENAME, { type: blob.type || 'image/png' });
+
+    // Mobile: native share sheet (WhatsApp status, etc.)
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({
+        files: [file],
+        title: 'Anjana & Akshay — Wedding Card',
+        text:  'You\'re invited! ✨'
+      });
+    } else {
+      // Desktop / fallback: trigger download
+      const url = URL.createObjectURL(blob);
+      const a   = document.createElement('a');
+      a.href     = url;
+      a.download = FILENAME;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
+    }
+  } catch {
+    // Silently fail — card image may not be uploaded yet
+  } finally {
+    btn.textContent = origText;
+    btn.disabled    = false;
+  }
+}
+
+document.querySelectorAll('.download-btn:not(.disabled)').forEach(btn => {
+  btn.addEventListener('click', () => downloadWeddingCard(btn));
+});
+
+/* ── Download second card ────────────────── */
+document.querySelectorAll('.download-btn-2:not(.disabled)').forEach(btn => {
+  btn.addEventListener('click', () => downloadWeddingCard(btn, 'assets/IMG-20260811-WA0090.jpg', 'Anjana-Akshay-WeddingCard-2.jpg'));
+});
+
+
+/* ════════════════════════════════════════════
+   HAPTIC FEEDBACK (PWA / Safari)
+════════════════════════════════════════════ */
+function vibrate(pattern) {
+  if ('vibrate' in navigator) navigator.vibrate(pattern);
+}
+
+swipeThumb.addEventListener('touchstart', () => vibrate(10), { passive: true });
+
+/* ════════════════════════════════════════════
+   RSVP TRACKING
+════════════════════════════════════════════ */
+const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/d/AKfycby6xBILS6Ejri5iqkPtWTtcHJKhR1JkMpDfZg2lV02pD8vS28EdeLxj5YwzXxGxQ3kW/usercontent';
+const rsvpModal = document.getElementById('rsvpModal');
+const rsvpForm = document.getElementById('rsvpForm');
+const rsvpClose = document.getElementById('rsvpClose');
+const countNumber = document.getElementById('countNumber');
+
+// Load attendee count from localStorage
+function loadAttendeeCount() {
+  const count = localStorage.getItem('rsvpCount') || '0';
+  countNumber.textContent = count;
+  return parseInt(count);
+}
+
+// Increment attendee count
+function incrementAttendeeCount() {
+  let count = parseInt(localStorage.getItem('rsvpCount') || '0');
+  count++;
+  localStorage.setItem('rsvpCount', count);
+  countNumber.textContent = count;
+}
+
+// Show RSVP modal
+function showRsvpModal() {
+  rsvpModal.classList.add('open');
+  rsvpModal.removeAttribute('aria-hidden');
+}
+
+// Hide RSVP modal
+function hideRsvpModal() {
+  rsvpModal.classList.remove('open');
+  rsvpModal.setAttribute('aria-hidden', 'true');
+}
+
+// Handle RSVP form submission
+rsvpForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const name = document.getElementById('guestName').value.trim();
+  const phone = document.getElementById('guestPhone').value.trim();
+  
+  if (!name || !phone) return;
+  
+  const submitBtn = rsvpForm.querySelector('.rsvp-submit');
+  const origText = submitBtn.textContent;
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Saving...';
+  
+  try {
+    // Send to Google Sheets
+    const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: name,
+        phone: phone,
+        timestamp: new Date().toLocaleString()
+      })
+    });
+    
+    // Increment counter
+    incrementAttendeeCount();
+    
+    // Reset form
+    rsvpForm.reset();
+    
+    // Show success message
+    submitBtn.textContent = '✓ RSVP Confirmed!';
+    setTimeout(() => {
+      hideRsvpModal();
+      submitBtn.textContent = origText;
+      submitBtn.disabled = false;
+    }, 1500);
+  } catch (error) {
+    submitBtn.textContent = origText;
+    submitBtn.disabled = false;
+  }
+});
+
+// Close modal handlers
+rsvpClose.addEventListener('click', hideRsvpModal);
+rsvpModal.addEventListener('click', (e) => {
+  if (e.target === rsvpModal || e.target === document.querySelector('.rsvp-overlay')) {
+    hideRsvpModal();
+  }
+});
+
+// Load initial count
+loadAttendeeCount();
+
+/* ════════════════════════════════════════════
+   MODIFY SWIPE TO SHOW RSVP MODAL
+════════════════════════════════════════════ */
+// Store original completeSwipe function
+const originalCompleteSwipe = window.completeSwipeFunc;
+
+// We'll modify the completeSwipe within the initSwipe IIFE by intercepting the details reveal
+const originalRevealDetails = revealDetails;
+function revealDetailsWithRsvp() {
+  originalRevealDetails();
+  // Show RSVP modal after a brief delay
+  setTimeout(showRsvpModal, 800);
+}
+revealDetails = revealDetailsWithRsvp;
+
+
+
+/* ════════════════════════════════════════════
+   TRANSPORT ACCORDION
+════════════════════════════════════════════ */
+(function initAccordion() {
+  const items = document.querySelectorAll('.accordion-item');
+  items.forEach(item => {
+    const header = item.querySelector('.accordion-header');
+    if (!header) return;
+    header.addEventListener('click', () => {
+      const isOpen = item.classList.contains('open');
+      // Close all
+      items.forEach(i => {
+        i.classList.remove('open');
+        i.querySelector('.accordion-header').setAttribute('aria-expanded', 'false');
+      });
+      // Open the clicked one if it was closed
+      if (!isOpen) {
+        item.classList.add('open');
+        header.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+})();

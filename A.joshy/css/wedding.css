@@ -233,26 +233,28 @@ img { display: block; }
 /* ── Groom name ──────────────────────────── */
 /*  Figma: y=314, Astonia Regular ~40px        */
 .splash-groom {
-  top: calc(max(env(safe-area-inset-top, 0px), 54px) + 80px); /* Below invite */
+  top: calc(max(env(safe-area-inset-top, 0px), 54px) + 60px); /* Below invite */
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: calc(100% - 32px);
+  max-width: 340px;
   font-family: var(--font-astonia);
-  font-size: clamp(34px, 10.1vw, 40px);
+  font-size: clamp(28px, 8.5vw, 36px);
   font-weight: 400;
   color: #fff;
   text-align: center;
   line-height: 1.1;
-  white-space: nowrap;
+  white-space: normal;
   z-index: 2;
 }
 
 /* ── "weds" badge ────────────────────────── */
 /*  Figma: y≈381, Comforter on pink bar        */
 .splash-weds-wrap {
-  top: calc(max(env(safe-area-inset-top, 0px), 54px) + 160px); /* Below groom name */
+  top: calc(max(env(safe-area-inset-top, 0px), 54px) + 130px); /* Below groom name */
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -284,23 +286,25 @@ img { display: block; }
 /* ── Bride name ──────────────────────────── */
 /*  Figma: y=437, Astonia Regular ~40px        */
 .splash-bride {
-  top: calc(max(env(safe-area-inset-top, 0px), 54px) + 240px); /* Below weds badge */
+  top: calc(max(env(safe-area-inset-top, 0px), 54px) + 210px); /* Below weds badge */
   left: 50%;
   transform: translateX(-50%);
+  width: calc(100% - 32px);
+  max-width: 340px;
   font-family: var(--font-astonia);
-  font-size: clamp(34px, 10.1vw, 40px);
+  font-size: clamp(28px, 8.5vw, 36px);
   font-weight: 400;
   color: #fff;
   text-align: center;
   line-height: 1.1;
-  white-space: nowrap;
+  white-space: normal;
   z-index: 2;
 }
 
 /* ── Countdown ───────────────────────────── */
 /*  Figma: y=526                               */
 .countdown {
-  top: calc(max(env(safe-area-inset-top, 0px), 54px) + 360px); /* Below bride name */
+  top: calc(max(env(safe-area-inset-top, 0px), 54px) + 310px); /* Below bride name */
   left: 0; right: 0;
   display: flex;
   align-items: flex-end;
@@ -366,7 +370,7 @@ img { display: block; }
 /* ── Event Date / Venue ──────────────────── */
 /*  Figma: y=646 (date), y=666 (venue)         */
 .event-meta {
-  top: calc(max(env(safe-area-inset-top, 0px), 54px) + 520px); /* Below countdown */
+  top: calc(max(env(safe-area-inset-top, 0px), 54px) + 470px); /* Below countdown */
   left: 0; right: 0;
   text-align: center;
   padding: 0 24px;
@@ -1117,16 +1121,16 @@ img { display: block; }
     font-size: 10px;
   }
   .splash-groom {
-    top: calc(max(env(safe-area-inset-top, 0px), 44px) + 50px);
-    font-size: clamp(22px, 6.5vw, 24px);
+    top: calc(max(env(safe-area-inset-top, 0px), 44px) + 40px);
+    font-size: clamp(22px, 6.2vw, 24px);
   }
   .splash-weds-wrap {
-    top: calc(max(env(safe-area-inset-top, 0px), 44px) + 110px);
+    top: calc(max(env(safe-area-inset-top, 0px), 44px) + 95px);
     width: 100px; height: 48px;
   }
   .splash-bride {
-    top: calc(max(env(safe-area-inset-top, 0px), 44px) + 160px);
-    font-size: clamp(22px, 6.5vw, 24px);
+    top: calc(max(env(safe-area-inset-top, 0px), 44px) + 140px);
+    font-size: clamp(22px, 6.2vw, 24px);
   }
   /* Give countdown a touch more clearance on SE */
   .countdown {

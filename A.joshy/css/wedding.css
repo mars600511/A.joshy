@@ -1,31 +1,193 @@
-/* ════════════════════════════════════════════
-   SPLASH PAGE — LAYOUT & ALIGNMENT FIX
-════════════════════════════════════════════ */
+/* ══════════════════════════════════════════
+   WEDDING WEBSITE — STYLES
+   Anjana & Akshay
+   23 August 2026 · Golden Palace Auditorium
+══════════════════════════════════════════ */
 
+/* ── Fonts ───────────────────────────────── */
+@font-face {
+  font-family: 'Astonia';
+  src: url('../fonts/Astonia-JRD9m.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'AppleGaramond';
+  src: url('../fonts/AppleGaramond-Light.ttf') format('truetype');
+  font-weight: 300; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'AppleGaramond';
+  src: url('../fonts/AppleGaramond-LightItalic.ttf') format('truetype');
+  font-weight: 300; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: 'AppleGaramond';
+  src: url('../fonts/AppleGaramond.ttf') format('truetype');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'AppleGaramond';
+  src: url('../fonts/AppleGaramond-Italic.ttf') format('truetype');
+  font-weight: 400; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: 'AppleGaramond';
+  src: url('../fonts/AppleGaramond-Bold.ttf') format('truetype');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'AppleGaramond';
+  src: url('../fonts/AppleGaramond-BoldItalic.ttf') format('truetype');
+  font-weight: 700; font-style: italic; font-display: swap;
+}
+
+/* ── Design Tokens ───────────────────────── */
+:root {
+  --primary:        #2E4A32;
+  --primary-dark:   #1a3a1e;
+  --gold-muted:     #8C7338;
+  --gold-accent:    #A88842;
+  --pink-light:     #E2A9A8;
+  --pink-dark:      #C97D81;
+  --text-dark:      #171717;
+  --text-body:      #5B6640;
+  --card-bg:        #F5F1E6;
+  --border:         #E6DCB8;
+
+  --font-serif:     'AppleGaramond', 'Apple Garamond', Georgia, serif;
+  --font-sans:      'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-astonia:   'Astonia', Georgia, serif;
+  --font-comforter: 'Comforter', cursive;
+
+  --radius-sm:      6px;
+  --radius-md:      12px;
+  --radius-pill:    999px;
+
+  --shadow-float:   0 18px 32px rgba(46,74,50,0.28);
+  --ease-ios:       cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* ── Reset ───────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  height: 100%; height: 100dvh;
+  width: 100%;
+  overflow: hidden;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  background: #111;
+}
+a { text-decoration: none; color: inherit; }
+button { border: none; background: none; cursor: pointer; font-family: inherit; }
+img { display: block; max-width: 100%; }
+
+/* ════════════════════════════════════════════
+   PAGE STACK
+════════════════════════════════════════════ */
+.page {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+}
+
+#details {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  transform: translateY(100%);
+  transition: transform 0.9s var(--ease-ios);
+}
+#details.revealed { transform: translateY(0); }
+#details::-webkit-scrollbar { width: 0; }
+
+/* ════════════════════════════════════════════
+   SPLASH PAGE
+════════════════════════════════════════════ */
 #splash {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  position: relative;
   width: 100%;
   height: 100%;
   height: 100dvh;
-  box-sizing: border-box;
-  /* Top padding prevents overlap with the fixed music button */
-  padding: calc(env(safe-area-inset-top, 0px) + 54px) 20px calc(env(safe-area-inset-bottom, 0px) + 20px);
-  position: relative;
   overflow: hidden;
+  padding: calc(env(safe-area-inset-top, 0px) + 56px) 16px calc(env(safe-area-inset-bottom, 0px) + 16px);
+  z-index: 1;
 }
 
-/* ── Music Pill (Kept fixed at top right) ── */
+/* ── Background & Overlay Fix ────────────── */
+.splash-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background: #1a221b;
+}
+.splash-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+.splash-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, 
+    rgba(0,0,0,0.65) 0%, 
+    rgba(0,0,0,0.2) 40%, 
+    rgba(0,0,0,0.75) 100%);
+}
+
+/* ── Music Pill (Fixed Top Right) ────────── */
 .music-pill {
   position: absolute;
   top: calc(env(safe-area-inset-top, 0px) + 12px);
   right: 16px;
   z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px 6px 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255,255,255,0.4);
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #fff;
+}
+.music-pill-label {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.music-pill-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.8);
+  flex-shrink: 0;
+}
+.music-pill .icon-play   { display: block; }
+.music-pill .icon-pause  { display: none; }
+.music-pill.playing .icon-play   { display: none; }
+.music-pill.playing .icon-pause  { display: block; animation: breathe 2s ease-in-out infinite; }
+
+@keyframes breathe {
+  0%,100% { opacity: 1; }
+  50%     { opacity: 0.55; }
 }
 
-/* ── Main Content Column (Centered) ──────── */
+/* ── Splash Main Content Container ───────── */
 .splash-content-container {
   display: flex;
   flex-direction: column;
@@ -34,50 +196,56 @@
   width: 100%;
   max-width: 340px;
   margin: 0 auto;
-  gap: 10px;
+  gap: clamp(4px, 1.2vh, 10px);
   text-align: center;
   z-index: 2;
 }
 
-/* ── Bismillah & Logo Fix ────────────────── */
-.bismillah,
+/* ── Bismillah ───────────────────────────── */
+.bismillah {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.bismillah-img {
+  width: min(100px, 28vw);
+  height: auto;
+  object-fit: contain;
+}
+
+/* ── Title Logo ─────────────────────────── */
 .splash-title-logo {
   display: flex;
   justify-content: center;
-  align-items: center;
   width: 100%;
 }
-
-.bismillah-img,
 .splash-title-img {
-  max-width: 80%;
+  width: min(200px, 55vw);
   height: auto;
-  margin: 0 auto;
+  object-fit: contain;
 }
 
-/* ── Invite Text Fix ─────────────────────── */
+/* ── Invite Text ─────────────────────────── */
 .splash-invite {
   width: 100%;
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: clamp(11px, 3vw, 13px);
   font-weight: 400;
   color: #FFFFFF;
   text-align: center;
-  line-height: 1.4;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
-  margin: 0 auto;
+  line-height: 1.35;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
 }
 
-/* ── Names Alignment & Cut-off Fix ───────── */
+/* ── Names Alignment Fix ─────────────────── */
 .splash-names {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
-  margin: 4px 0;
+  margin: 2px 0;
 }
-
 .splash-groom,
 .splash-bride {
   font-family: var(--font-astonia);
@@ -86,12 +254,11 @@
   color: #FFFFFF;
   text-align: center;
   line-height: 1.2;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
-  white-space: normal;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.8);
   word-break: break-word;
 }
 
-/* ── Weds Badge Adjustment ───────────────── */
+/* ── Weds Badge Fix ──────────────────────── */
 .splash-weds-wrap {
   display: flex;
   align-items: center;
@@ -101,52 +268,308 @@
   position: relative;
   margin: 2px 0;
 }
+.splash-weds-bar {
+  position: absolute;
+  width: 68px;
+  height: 22px;
+  background: var(--pink-dark);
+  border-radius: 3px;
+  transform: rotate(-21deg);
+}
+.splash-weds {
+  position: relative;
+  font-family: var(--font-comforter);
+  font-size: clamp(28px, 8vw, 36px);
+  color: #fff;
+  transform: rotate(-25deg);
+  line-height: 1;
+  white-space: nowrap;
+  z-index: 1;
+}
 
-/* ── Countdown Centering ─────────────────── */
+/* ── Countdown Timer Centered ───────────── */
 .countdown {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  gap: 6px;
+  gap: clamp(4px, 1.5vw, 8px);
   width: 100%;
-  margin: 6px 0;
+  margin-top: 2px;
+}
+.count-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.count-label {
+  font-family: var(--font-sans);
+  font-size: clamp(10px, 2.8vw, 12px);
+  font-weight: 500;
+  color: #FFFFFF;
+  line-height: 1;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+.count-box {
+  width: clamp(46px, 13vw, 56px);
+  height: clamp(58px, 16vw, 70px);
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.85);
+  background: linear-gradient(180deg, var(--pink-light) 0%, var(--pink-dark) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.count-box::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 50% 0;
+  background: rgba(255,255,255,0.18);
+  pointer-events: none;
+}
+.count-box span {
+  font-family: var(--font-sans);
+  font-size: clamp(20px, 6vw, 26px);
+  font-weight: 600;
+  color: #fff;
+  position: relative;
+  z-index: 1;
+}
+.count-sep {
+  display: flex;
+  align-items: center;
+  padding-bottom: clamp(18px, 5vw, 24px);
+  color: #FFFFFF;
+  font-size: 16px;
+  line-height: 1;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
 }
 
-/* ── Date & Venue Contrast Fix ───────────── */
+/* ── Event Date & Venue (High Contrast) ──── */
 .event-meta {
   text-align: center;
   width: 100%;
   margin-top: 2px;
 }
-
 .event-date,
 .event-venue {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: clamp(12px, 3.2vw, 14px);
   font-weight: 500;
-  color: #FFFFFF; /* High contrast white text */
+  color: #FFFFFF;
   line-height: 1.4;
-  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.85); /* Dark shadow makes text visible over photo */
+  text-shadow: 0 1px 6px rgba(0,0,0,0.9);
 }
 
-/* ── Swipe CTA Track Centering Fix ───────── */
+/* ── Swipe CTA Track ─────────────────────── */
 .swipe-wrap {
   width: 100%;
-  max-width: 280px;
+  max-width: 290px;
   margin: 0 auto;
   z-index: 2;
 }
-
 .swipe-track {
   position: relative;
   width: 100%;
-  height: 56px;
-  margin: 0 auto;
+  height: clamp(54px, 13vw, 64px);
   border-radius: var(--radius-pill);
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: var(--shadow-float);
+  border: 1px solid rgba(255,255,255,0.4);
   overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+.swipe-fill {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, rgba(46,74,50,0.6), rgba(168,136,66,0.5));
+  width: 0;
+}
+.swipe-thumb {
+  position: absolute;
+  left: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: clamp(46px, 11vw, 54px);
+  height: clamp(46px, 11vw, 54px);
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  cursor: grab;
+  will-change: transform;
+}
+.swipe-thumb:active { cursor: grabbing; }
+.swipe-thumb svg { pointer-events: none; width: 20px; height: 20px; }
+.swipe-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: clamp(48px, 12vw, 60px);
+  padding-right: 12px;
+  font-family: var(--font-sans);
+  font-size: clamp(12px, 3.2vw, 13px);
+  font-weight: 500;
+  color: #FFFFFF;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+  pointer-events: none;
+  white-space: nowrap;
+}
+.swipe-track.done { background: rgba(46,74,50,0.5); }
+.swipe-track.done .swipe-thumb { background: var(--primary); }
+.swipe-track.done .swipe-thumb svg { stroke: #fff; }
+.swipe-track.done .swipe-label { color: #fff; padding-left: 0; }
+
+/* ── Petals ──────────────────────────────── */
+.petals {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+.petal {
+  position: absolute;
+  left: var(--x);
+  top: -24px;
+  width: 9px;
+  height: 13px;
+  background: radial-gradient(ellipse, rgba(226,169,168,0.85), rgba(201,125,129,0.45));
+  border-radius: 50% 0 50% 0;
+  animation: petalFall var(--dur) linear var(--delay) infinite;
+}
+@keyframes petalFall {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+  8%   { opacity: 0.85; }
+  90%  { opacity: 0.45; }
+  100% { transform: translateY(105vh) rotate(380deg); opacity: 0; }
+}
+
+/* ── Animations ──────────────────────────── */
+#splash.exit {
+  pointer-events: none;
+  animation: splashExit 0.9s var(--ease-ios) forwards;
+}
+@keyframes splashExit {
+  to { opacity: 0.2; transform: scale(0.95); }
+}
+
+/* ════════════════════════════════════════════
+   DETAILS PAGE
+════════════════════════════════════════════ */
+#details { background: #fff; }
+
+.details-hero {
+  position: relative;
+  width: 100%;
+  min-height: 280px;
+  max-height: 340px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: calc(env(safe-area-inset-top, 0px) + 20px) 16px 50px;
+  overflow: hidden;
+  background: linear-gradient(160deg, #F5F1E6 0%, #E2A9A8 50%, #2E4A32 100%);
+}
+.details-hero-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 35%;
+  z-index: 0;
+}
+.details-hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(46,74,50,0.2) 0%, rgba(46,74,50,0.4) 100%);
+}
+
+.dh-names-container {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 320px;
+}
+.dh-groom,
+.dh-bride {
+  font-family: var(--font-astonia);
+  font-size: clamp(24px, 7vw, 32px);
+  font-weight: 400;
+  color: #fff;
+  text-align: center;
+  line-height: 1.1;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  word-break: break-word;
+}
+.dh-weds-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 40px;
+  position: relative;
+  margin: -2px 0;
+}
+.dh-weds-bar {
+  position: absolute;
+  width: 64px;
+  height: 20px;
+  background: var(--pink-dark);
+  border-radius: 3px;
+  transform: rotate(-21deg);
+}
+.dh-weds {
+  position: relative;
+  font-family: var(--font-comforter);
+  font-size: clamp(26px, 8vw, 34px);
+  color: #fff;
+  transform: rotate(-25deg);
+  line-height: 1;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.details-sheet {
+  position: relative;
+  z-index: 3;
+  background: #fff;
+  border-radius: 24px 24px 0 0;
+  margin-top: -30px;
+  padding: 0 16px calc(env(safe-area-inset-bottom, 24px) + 48px);
+  min-height: calc(100dvh - 250px);
+}
+
+.card-section { margin-top: 20px; }
+.section-heading {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--text-dark);
+  margin-bottom: 10px;
+}
+.info-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-md);
+  padding: 16px 18px;
 }

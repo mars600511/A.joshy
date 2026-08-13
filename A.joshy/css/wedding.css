@@ -47,14 +47,14 @@
 
 /* ── Design Tokens ───────────────────────── */
 :root {
-  --primary:      #2E4A32;
-  --primary-dark: #1a3a1e;
-  --pink-light:   #E2A9A8;
-  --pink-dark:    #C97D81;
+  --primary:      #780269;
+  --primary-dark: #5a0050;
+  --pink-light:   #ed94d5;
+  --pink-dark:    #fc72d7;
   --text-dark:    #171717;
-  --text-body:    #5B6640;
-  --card-bg:      #F5F1E6;
-  --border:       #E6DCB8;
+  --text-body:    #516271;
+  --card-bg:      #f6f6f6;
+  --border:       #e3e3e3;
 
   --font-serif:    'AppleGaramond', 'Apple Garamond', 'Cormorant Garamond', Garamond, Georgia, serif;
   --font-sans:     'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -65,7 +65,7 @@
   --radius-md:    12px;
   --radius-pill:  999px;
 
-  --shadow-float: 0 18px 32px rgba(46,74,50,0.28);
+  --shadow-float: 0 18px 32px rgba(82,0,72,0.28);
   --ease-ios:     cubic-bezier(0.32, 0.72, 0, 1);
 }
 
@@ -76,7 +76,7 @@ html, body {
   overflow: hidden;
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
-  background: #E6DCB8;
+  background: #e8b4df;
 }
 a { text-decoration: none; color: inherit; }
 button { border: none; background: none; cursor: pointer; font-family: inherit; }
@@ -116,7 +116,7 @@ img { display: block; }
   inset: 0;
   z-index: 0;
   /* Gradient fallback if image fails to load */
-  background: linear-gradient(160deg, #F5F1E6 0%, #E6DCB8 30%, #A88842 60%, #2E4A32 100%);
+  background: linear-gradient(160deg, #f5d5ef 0%, #e080cc 30%, #b840a8 60%, #780269 100%);
 }
 .splash-bg-img {
   width: 100%;
@@ -128,10 +128,10 @@ img { display: block; }
   position: absolute;
   inset: 0;
   background: linear-gradient(180deg,
-    rgba(174,137,104,0.06) 0%,
-    rgba(174,137,104,0.04) 60%,
-    rgba(136,126,104,0.12) 100%);
-}}
+    rgba(220,130,210,0.06) 0%,
+    rgba(220,130,210,0.04) 60%,
+    rgba(200,100,190,0.12) 100%);
+}
 
 /* ── Z-layer for all content ─────────────── */
 #splash > *:not(.splash-bg):not(.petals) {
@@ -218,7 +218,7 @@ img { display: block; }
 /* ── Invite text ─────────────────────────── */
 /*  Figma: y=268, Poppins Regular 12px         */
 .splash-invite {
-  top: calc(max(env(safe-area-inset-top, 0px), 54px) + 20px); /* Top of splash */
+  top: calc(max(env(safe-area-inset-top, 0px), 54px) + 520px); /* Moved down below bride name */
   left: 50%;
   transform: translateX(-50%);
   width: min(298px, calc(100% - 32px));
@@ -233,21 +233,19 @@ img { display: block; }
 /* ── Groom name ──────────────────────────── */
 /*  Figma: y=314, Astonia Regular ~40px        */
 .splash-groom {
-  top: calc(max(env(safe-area-inset-top, 0px), 54px) + 60px); /* Below invite */
+  top: calc(max(env(safe-area-inset-top, 0px), 54px) + 60px); /* Moved to top */
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: calc(100% - 32px);
-  max-width: 340px;
   font-family: var(--font-astonia);
-  font-size: clamp(28px, 8.5vw, 36px);
+  font-size: clamp(34px, 10.1vw, 40px);
   font-weight: 400;
   color: #fff;
   text-align: center;
   line-height: 1.1;
-  white-space: normal;
+  white-space: nowrap;
   z-index: 2;
 }
 
@@ -268,7 +266,7 @@ img { display: block; }
   position: absolute;
   width: 80px;
   height: 28px;
-  background: #C97D81;
+  background: #f900a3;
   border-radius: 3px;
   transform: rotate(-21deg);
 }
@@ -286,25 +284,23 @@ img { display: block; }
 /* ── Bride name ──────────────────────────── */
 /*  Figma: y=437, Astonia Regular ~40px        */
 .splash-bride {
-  top: calc(max(env(safe-area-inset-top, 0px), 54px) + 210px); /* Below weds badge */
+  top: calc(max(env(safe-area-inset-top, 0px), 54px) + 190px); /* Below weds badge */
   left: 50%;
   transform: translateX(-50%);
-  width: calc(100% - 32px);
-  max-width: 340px;
   font-family: var(--font-astonia);
-  font-size: clamp(28px, 8.5vw, 36px);
+  font-size: clamp(34px, 10.1vw, 40px);
   font-weight: 400;
   color: #fff;
   text-align: center;
   line-height: 1.1;
-  white-space: normal;
+  white-space: nowrap;
   z-index: 2;
 }
 
 /* ── Countdown ───────────────────────────── */
 /*  Figma: y=526                               */
 .countdown {
-  top: calc(max(env(safe-area-inset-top, 0px), 54px) + 310px); /* Below bride name */
+  top: calc(max(env(safe-area-inset-top, 0px), 54px) + 310px); /* Below bride name and invite */
   left: 0; right: 0;
   display: flex;
   align-items: flex-end;
@@ -336,7 +332,7 @@ img { display: block; }
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 6px 18px rgba(201,125,129,0.35);
+  box-shadow: 0 6px 18px rgba(200,60,160,0.35);
   position: relative;
   overflow: hidden;
   flex-shrink: 0;
@@ -535,7 +531,7 @@ img { display: block; }
   overflow: hidden;
   flex-shrink: 0;
   /* Gradient fallback if image fails to load */
-  background: linear-gradient(160deg, #F5F1E6 0%, #E2A9A8 50%, #2E4A32 100%);
+  background: linear-gradient(160deg, #d490c4 0%, #a03898 50%, #780269 100%);
 }
 .details-hero-bg {
   position: absolute;
@@ -600,7 +596,7 @@ img { display: block; }
   position: absolute;
   width: 68px;
   height: 22px;
-  background: #C97D81;
+  background: #f900a3;
   border-radius: 3px;
   transform: rotate(-21deg);
 }
@@ -917,7 +913,7 @@ img { display: block; }
 
 /* Gradient header */
 .selfie-header {
-  background: linear-gradient(135deg, #E2A9A8 0%, #2E4A32 100%);
+  background: linear-gradient(135deg, #c040a0 0%, #780269 100%);
   padding: 22px 20px;
   display: flex;
   align-items: center;
@@ -1117,155 +1113,25 @@ img { display: block; }
 @media (max-height: 700px) {
   /* Compress the names block upward to give countdown room */
   .splash-invite {
-    top: calc(max(env(safe-area-inset-top, 0px), 44px) + 10px);
+    top: calc(max(env(safe-area-inset-top, 0px), 44px) + 210px);
     font-size: 10px;
   }
   .splash-groom {
-    top: calc(max(env(safe-area-inset-top, 0px), 44px) + 40px);
-    font-size: clamp(22px, 6.2vw, 24px);
+    top: calc(max(env(safe-area-inset-top, 0px), 44px) + 238px);
+    font-size: clamp(22px, 6.5vw, 24px);
   }
   .splash-weds-wrap {
-    top: calc(max(env(safe-area-inset-top, 0px), 44px) + 95px);
+    top: calc(max(env(safe-area-inset-top, 0px), 44px) + 284px);
     width: 100px; height: 48px;
   }
   .splash-bride {
-    top: calc(max(env(safe-area-inset-top, 0px), 44px) + 140px);
-    font-size: clamp(22px, 6.2vw, 24px);
+    top: calc(max(env(safe-area-inset-top, 0px), 44px) + 330px);
+    font-size: clamp(22px, 6.5vw, 24px);
   }
   /* Give countdown a touch more clearance on SE */
   .countdown {
     bottom: calc(max(env(safe-area-inset-bottom, 0px), 16px) + 152px);
   }
-}
-
-/* ════════════════════════════════════════════
-   RSVP MODAL
-════════════════════════════════════════════ */
-.rsvp-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-.rsvp-modal.open {
-  opacity: 1;
-  pointer-events: all;
-}
-.rsvp-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.5);
-  backdrop-filter: blur(4px);
-}
-.rsvp-card {
-  position: relative;
-  z-index: 10;
-  background: var(--card-bg);
-  border-radius: var(--radius-md);
-  padding: 24px;
-  width: min(340px, calc(100% - 32px));
-  box-shadow: 0 20px 60px rgba(46,74,50,0.3);
-  max-height: 90vh;
-  overflow-y: auto;
-}
-.rsvp-close {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 32px;
-  height: 32px;
-  border: none;
-  background: none;
-  font-size: 28px;
-  color: var(--primary);
-  cursor: pointer;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.rsvp-close:hover { opacity: 0.7; }
-.rsvp-title {
-  font-family: var(--font-serif);
-  font-size: 22px;
-  color: var(--primary);
-  margin-bottom: 20px;
-  text-align: center;
-}
-.rsvp-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-bottom: 20px;
-}
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.form-group label {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--primary);
-}
-.form-group input {
-  padding: 12px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  font-family: var(--font-sans);
-  font-size: 14px;
-  color: var(--text-dark);
-  background: #fff;
-}
-.form-group input:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 2px rgba(46,74,50,0.1);
-}
-.rsvp-submit {
-  padding: 12px 16px;
-  background: var(--primary);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius-pill);
-  font-family: var(--font-sans);
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.15s;
-}
-.rsvp-submit:hover { background: var(--primary-dark); }
-.rsvp-submit:active { transform: scale(0.98); }
-.rsvp-submit:disabled {
-  background: rgba(46,74,50,0.3);
-  cursor: not-allowed;
-}
-.rsvp-note {
-  font-size: 12px;
-  color: var(--text-body);
-  text-align: center;
-  margin-bottom: 16px;
-}
-.attendee-counter {
-  text-align: center;
-  padding: 12px;
-  background: rgba(226,169,168,0.1);
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-}
-.attendee-counter p {
-  font-size: 13px;
-  color: var(--primary);
-  margin: 0;
-}
-#countNumber {
-  font-weight: 600;
-  color: var(--primary);
 }
 
 /* ════════════════════════════════════════════

@@ -453,7 +453,7 @@ function revealDetailsWithRsvp() {
   originalRevealDetails();
   // Show RSVP modal after a brief delay
   setTimeout(showRsvpModal, 800);
-}
+} 
 revealDetails = revealDetailsWithRsvp;
 
 
